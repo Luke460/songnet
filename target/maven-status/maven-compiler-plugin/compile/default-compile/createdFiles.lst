@@ -1,8 +1,0 @@
-songnet/tools/MusicReader.class
-songnet/model/DecodedSong.class
-songnet/tools/TextMapper.class
-songnet/main/Main.class
-songnet/model/Song.class
-songnet/constants/Constants.class
-songnet/tools/ScoreGenerator.class
-songnet/model/Word.class
