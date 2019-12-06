@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.TreeMap;
 
 import songnet.model.Word;
-import static songnet.constants.Constants.TEXT_SAMPLES_NUMBER;
+import static songnet.constants.Constants.*;
 
 public class ScoreGenerator { 
 
@@ -16,22 +16,23 @@ public class ScoreGenerator {
 		double globalScore = 0;
 		
 		for(Word inputWord:input.values()) {
-			int inputPos = inputKeyPositions.get(inputWord.getText());
+			//int inputPos = inputKeyPositions.get(inputWord.getText());
 			
 			Word storedWord = null;
 			if(realSong.containsKey(inputWord.getText())) {
 				storedWord = realSong.get(inputWord.getText());
 				
-				int storedPos = storedKeyPositions.get(inputWord.getText());
+				//int storedPos = storedKeyPositions.get(inputWord.getText());
 				
 				globalScore += getSingleScore(storedWord, inputWord);
 				
 			} else {			
-				// globalScore += 0;		
+				globalScore -= inputWord.getOccurences() * WORD_NOT_PRESENT_PENALITY_MULTIPLIER;		
 			}
 	
 		}
 			
+		if(globalScore<0) return 0.0;
 		return globalScore;
 		
 	}
@@ -53,7 +54,7 @@ public class ScoreGenerator {
 		
 		if(!wd_a.getText().equals(wd_b.getText())) return 0;
 		 
-		double score = ((wd_a.getOccurences() * wd_b.getOccurences()) - 0.75) * 4;
+		double score = (wd_a.getOccurences() * wd_b.getOccurences()) - WORD_SINGLE_PRESENCE_PENALITY;
 		
 		return score;
 	}

@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -60,7 +61,7 @@ public class MusicReader {
 			if(!storedSongNamesSet.contains(name)) {
 
 				String authorName = (jsonSong.getString("authorName"));
-				String fullText = (jsonSong.getString("fullText"));
+				String fullText = StringCleaner.clean((jsonSong.getString("fullText")));
 
 				Song song = new Song(name, authorName, fullText);
 
@@ -78,7 +79,7 @@ public class MusicReader {
 		}
 
 		Files.write(Paths.get(MAPPED_SONGS_PATH), mappedSongs.toString().getBytes());
-		
+
 		System.out.println("Dataset size: " + dataset.size());
 
 		return dataset;
@@ -88,7 +89,7 @@ public class MusicReader {
 	public static void executeComparisonWithDataset(List<DecodedSong> dataset) throws IOException {
 
 		String receivedText = new String(Files.readAllBytes(Paths.get(RECEIVED_TEXT_PATH))).toLowerCase();
-		receivedText.replaceAll("[^a-zA-Z0-9]", " "); 
+		receivedText = StringCleaner.clean(receivedText);
 		Song unknownSong = new Song("unknown", "unknown", receivedText);
 		DecodedSong decodedUnknownSong= TextMapper.generateMap(unknownSong);
 		TreeMap<Double,DecodedSong> results = new TreeMap<>(Comparator.reverseOrder());
@@ -104,19 +105,33 @@ public class MusicReader {
 		}
 
 		int count = 0;
-		
+		ArrayList<Double> values = new ArrayList<>(results.size());
+		double firstValue = 0.01;
+		double secondValue = 0.01;
+
 		for(Entry<Double, DecodedSong> entry: results.entrySet()) {
 			DecodedSong resultSong = entry.getValue();
 			Double score = entry.getKey();
 			if(score > 0 && count<MAX_OUTPUT_SONGS_NUMBER) {
-				count ++;
+				values.add(count, score);
 				System.out.println("----------------------------------------");
+				if(count==0) System.out.println("########################################");
 				System.out.println("TITLE: " + resultSong.getName());
 				System.out.println("AUTHOR: " + resultSong.getAuthorName());
 				System.out.println("SCORE: " + score);
+				if(count==0) System.out.println("########################################");
+				count ++;
 			}
 		}
+		Double total = values.stream()
+				.collect(Collectors.summingDouble(Double::doubleValue));
+
 		System.out.println("----------------------------------------");
+		if(values.size()!=0) {
+			int setScore = (int) ((values.get(0)*100.0)/total);
+			double scoreAdjustment = values.get(0)<(FINAL_SCORE_THRESHOLD*(1/values.size()))?(values.get(0)/(FINAL_SCORE_THRESHOLD*(1/values.size()))):1d;
+			System.out.println("Reliability score: " + (int) (setScore*scoreAdjustment) + "%");
+		}
 
 	}
 
