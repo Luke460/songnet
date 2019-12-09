@@ -1,5 +1,6 @@
 package songnet.process;
 
+import static songnet.constants.Constants.FORCE_DATASET_UPDATE;
 import static songnet.constants.Constants.MAPPED_SONGS_PATH;
 import static songnet.constants.Constants.SONG_LYRICS_PATH;
 
@@ -30,27 +31,31 @@ public class MusicReader {
 		String mappedSongsFileContent = new String(Files.readAllBytes(Paths.get(MAPPED_SONGS_PATH)));
 
 		JSONArray songs = new JSONArray(storedSongsFileContent);
-		
+
 		if(mappedSongsFileContent == null || mappedSongsFileContent.equals("")) {
 			mappedSongsFileContent = "[]";
 		}
-		
-		JSONArray mappedSongs = new JSONArray(mappedSongsFileContent);
+
+		JSONArray mappedSongs;
 
 		HashSet<String> storedSongNamesSet = new HashSet<>();
 
 		ArrayList<DecodedSong> dataset = new ArrayList<>();
 
+		if(!FORCE_DATASET_UPDATE) {
+			// check stored songs
+			mappedSongs = new JSONArray(mappedSongsFileContent);
+			for (int i = 0; i < mappedSongs.length(); i++) {
+				String string = mappedSongs.getJSONObject(i).toString();
+				DecodedSong decodedSong = mapper.readValue(string, DecodedSong.class);
 
-		// check stored songs
-		for (int i = 0; i < mappedSongs.length(); i++) {
-			String string = mappedSongs.getJSONObject(i).toString();
-			DecodedSong decodedSong = mapper.readValue(string, DecodedSong.class);
+				String name = decodedSong.getName();
+				storedSongNamesSet.add(name);
+				dataset.add(decodedSong);
 
-			String name = decodedSong.getName();
-			storedSongNamesSet.add(name);
-			dataset.add(decodedSong);
-
+			}
+		} else {
+			mappedSongs = new JSONArray();
 		}
 
 
@@ -73,7 +78,6 @@ public class MusicReader {
 				mappedSongs.put(serializedSong);
 
 				System.out.println(serializedSong);
-
 				dataset.add(decodedSong);
 
 			}
