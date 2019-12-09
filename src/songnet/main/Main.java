@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import songnet.model.DecodedSong;
-import songnet.tools.MusicReader;
+import songnet.process.MusicReader;
+import songnet.process.SongComparator;
 
 public class Main {
 
@@ -15,7 +16,7 @@ public class Main {
 		System.out.println("Dataset updated.");
 		
 		System.out.println("Searching...");
-		MusicReader.executeComparisonWithDataset(dataset);
+		SongComparator.executeComparisonWithDataset(dataset);
 		System.out.println("Done.");
 		
 

@@ -1,18 +1,15 @@
 package songnet.tools;
 
-import java.util.ArrayList;
+import static songnet.constants.Constants.MINIMAL_WORD_LENGTH;
+import static songnet.constants.Constants.TEXT_SAMPLES_NUMBER;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import songnet.model.DecodedSong;
 import songnet.model.Song;
 import songnet.model.Word;
-
-import static songnet.constants.Constants.MINIMAL_WORD_LENGTH;
-import static songnet.constants.Constants.TEXT_SAMPLES_NUMBER;
 
 public class TextMapper {
 	

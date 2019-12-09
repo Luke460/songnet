@@ -1,17 +1,18 @@
 package songnet.tools;
 
+import static songnet.constants.Constants.WORD_NOT_PRESENT_PENALITY_MULTIPLIER;
+import static songnet.constants.Constants.WORD_SINGLE_PRESENCE_PENALITY;
+
 import java.util.HashMap;
-import java.util.TreeMap;
 
 import songnet.model.Word;
-import static songnet.constants.Constants.*;
 
 public class ScoreGenerator { 
 
 	public static double generateScore(HashMap<String,Word> input, HashMap<String,Word> realSong) {
 		
-		HashMap<String,Integer> inputKeyPositions = getKeyPositions(input);
-		HashMap<String,Integer> storedKeyPositions = getKeyPositions(realSong);
+		//HashMap<String,Integer> inputKeyPositions = getKeyPositions(input);
+		//HashMap<String,Integer> storedKeyPositions = getKeyPositions(realSong);
 		
 		double globalScore = 0;
 		
@@ -58,7 +59,7 @@ public class ScoreGenerator {
 		
 		return score;
 	}
-	
+	/*
 	private static HashMap<String,Integer> getKeyPositions(HashMap<String,Word> map) {
 		
 		HashMap<String,Integer> wordToPosition = new HashMap<String,Integer>();
@@ -72,5 +73,5 @@ public class ScoreGenerator {
 		return wordToPosition;
 		
 	}
-	
+	*/
 }
