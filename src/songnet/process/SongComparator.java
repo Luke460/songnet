@@ -46,8 +46,8 @@ public class SongComparator {
 		for(Entry<Double, DecodedSong> entry: results.entrySet()) {
 			DecodedSong resultSong = entry.getValue();
 			Double score = entry.getKey();
+			values.add(count, score);
 			if(score > 0 && count<MAX_OUTPUT_SONGS_NUMBER) {
-				values.add(count, score);
 				System.out.println("----------------------------------------");
 				if(count==0) System.out.println("########################################");
 				System.out.println("TITLE: " + resultSong.getName());
