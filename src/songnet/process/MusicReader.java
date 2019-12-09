@@ -30,6 +30,11 @@ public class MusicReader {
 		String mappedSongsFileContent = new String(Files.readAllBytes(Paths.get(MAPPED_SONGS_PATH)));
 
 		JSONArray songs = new JSONArray(storedSongsFileContent);
+		
+		if(mappedSongsFileContent == null || mappedSongsFileContent.equals("")) {
+			mappedSongsFileContent = "[]";
+		}
+		
 		JSONArray mappedSongs = new JSONArray(mappedSongsFileContent);
 
 		HashSet<String> storedSongNamesSet = new HashSet<>();
@@ -39,7 +44,7 @@ public class MusicReader {
 
 		// check stored songs
 		for (int i = 0; i < mappedSongs.length(); i++) {
-			String string = mappedSongs.getString(i);
+			String string = mappedSongs.getJSONObject(i).toString();
 			DecodedSong decodedSong = mapper.readValue(string, DecodedSong.class);
 
 			String name = decodedSong.getName();
@@ -64,7 +69,7 @@ public class MusicReader {
 
 				DecodedSong decodedSong = TextMapper.generateMap(song);
 
-				String serializedSong = mapper.writeValueAsString(decodedSong);
+				JSONObject serializedSong = new JSONObject(mapper.writeValueAsString(decodedSong));
 				mappedSongs.put(serializedSong);
 
 				System.out.println(serializedSong);
