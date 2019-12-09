@@ -2,9 +2,9 @@ package songnet.constants;
 
 public interface Constants {
 
-	public static final int MINIMAL_WORD_LENGTH = 4;
-	public static final int TEXT_SAMPLES_NUMBER = 128;
-	public static final boolean FORCE_DATASET_UPDATE = false;
+	public static final int MINIMAL_WORD_LENGTH = 3;
+	public static final int TEXT_SAMPLES_NUMBER = -1;  // -1 = uncompressed
+	public static final boolean FORCE_DATASET_UPDATE = true;
 	
 	public static final double WORD_NOT_PRESENT_PENALITY_MULTIPLIER = 4.0;
 	public static final double WORD_SINGLE_PRESENCE_PENALITY = 0.5;

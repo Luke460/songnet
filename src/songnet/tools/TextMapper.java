@@ -41,6 +41,7 @@ public class TextMapper {
 	}
 
 	private static HashMap<String, Integer> resizeMap(HashMap<String, Integer> stringToNumber) {
+		if(TEXT_SAMPLES_NUMBER==-1) return stringToNumber;
 		HashMap<String, Integer> sortedMap = new HashMap<>();
 		HashMap<String, Integer> result = new HashMap<>();
 		sortedMap = (HashMap<String, Integer>) MapUtil.sortByValue(stringToNumber);
