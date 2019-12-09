@@ -7,7 +7,7 @@ public class DecodedSong {
 	
 	private String name;
 	private String authorName;
-	private HashMap<String,Word> words;
+	private HashMap<String,Integer> wordToNumber;
 	
 	public DecodedSong() {
 		super();
@@ -17,14 +17,14 @@ public class DecodedSong {
 		super();
 		this.name = name;
 		this.authorName = authorName;
-		this.words = new HashMap<String, Word>();
+		this.wordToNumber = new HashMap<String,Integer>();
 	}
 	
-	public DecodedSong(String name, String authorName, HashMap<String, Word> words) {
+	public DecodedSong(String name, String authorName, HashMap<String,Integer> words) {
 		super();
 		this.name = name;
 		this.authorName = authorName;
-		this.words = words;
+		this.wordToNumber = words;
 	}
 
 	public String getName() {
@@ -43,12 +43,12 @@ public class DecodedSong {
 		this.authorName = authorName;
 	}
 
-	public HashMap<String, Word> getWords() {
-		return words;
+	public HashMap<String,Integer> getWords() {
+		return wordToNumber;
 	}
 
-	public void setWords(HashMap<String, Word> words) {
-		this.words = words;
+	public void setWords(HashMap<String,Integer> words) {
+		this.wordToNumber = words;
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class DecodedSong {
 		int result = 1;
 		result = prime * result + ((authorName == null) ? 0 : authorName.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((words == null) ? 0 : words.hashCode());
+		result = prime * result + ((wordToNumber == null) ? 0 : wordToNumber.hashCode());
 		return result;
 	}
 
@@ -80,10 +80,10 @@ public class DecodedSong {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (words == null) {
-			if (other.words != null)
+		if (wordToNumber == null) {
+			if (other.wordToNumber != null)
 				return false;
-		} else if (!words.equals(other.words))
+		} else if (!wordToNumber.equals(other.wordToNumber))
 			return false;
 		return true;
 	}
@@ -96,7 +96,7 @@ public class DecodedSong {
 		builder.append(", authorName=");
 		builder.append(authorName);
 		builder.append(", words=");
-		builder.append(words);
+		builder.append(wordToNumber);
 		builder.append("]");
 		return builder.toString();
 	}

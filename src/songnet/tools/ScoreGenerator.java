@@ -4,24 +4,25 @@ import static songnet.constants.Constants.WORD_NOT_PRESENT_PENALITY_MULTIPLIER;
 import static songnet.constants.Constants.WORD_SINGLE_PRESENCE_PENALITY;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import songnet.model.Word;
 
 public class ScoreGenerator { 
 
-	public static double generateScore(HashMap<String,Word> input, HashMap<String,Word> realSong) {
+	public static double generateScore(HashMap<String, Integer> hashMap, HashMap<String, Integer> hashMap2) {
 		
 		//HashMap<String,Integer> inputKeyPositions = getKeyPositions(input);
 		//HashMap<String,Integer> storedKeyPositions = getKeyPositions(realSong);
 		
 		double globalScore = 0;
 		
-		for(Word inputWord:input.values()) {
+		for(Entry<String, Integer> inputEntry:hashMap.entrySet()) {
 			//int inputPos = inputKeyPositions.get(inputWord.getText());
-			
+			Word inputWord = new Word(inputEntry.getKey(), inputEntry.getValue());
 			Word storedWord = null;
-			if(realSong.containsKey(inputWord.getText())) {
-				storedWord = realSong.get(inputWord.getText());
+			if(hashMap2.containsKey(inputWord.getText())) {
+				storedWord = new Word(inputWord.getText(),hashMap2.get(inputWord.getText()));
 				
 				//int storedPos = storedKeyPositions.get(inputWord.getText());
 				
