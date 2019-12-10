@@ -4,6 +4,7 @@ import static songnet.constants.Constants.WORD_NOT_PRESENT_PENALITY_MULTIPLIER;
 import static songnet.constants.Constants.WORD_SINGLE_PRESENCE_PENALITY;
 import static songnet.constants.Constants.SEQUENCIAL_MULTIPLIER;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -18,8 +19,8 @@ public class ScoreGenerator {
 		//HashMap<String,Integer> storedKeyPositions = getKeyPositions(realSong);
 		
 		double globalScore = 0;
-		int i = 1;
-		int lastPosition = 0;
+		int i = 0;
+		HashMap<String,ArrayList<Integer>> wordToLastPosition = new HashMap<>();
 		for(Entry<String, PositionDetail> inputEntry:hashMap.entrySet()) {
 			//int inputPos = inputKeyPositions.get(inputWord.getText());
 			Word inputWord = new Word(inputEntry.getKey(), inputEntry.getValue());
@@ -29,10 +30,18 @@ public class ScoreGenerator {
 				
 				//int storedPos = storedKeyPositions.get(inputWord.getText());
 				
-				globalScore += getSingleScore(storedWord, inputWord, lastPosition);
-				lastPosition = i;
+				if(wordToLastPosition.containsKey(storedWord.getText())) {
+					wordToLastPosition.get(storedWord.getText()).add(i);
+				} else {
+					ArrayList<Integer> temp = new ArrayList<>();
+					temp.addAll(hashMap.get(inputWord.getText()).getPositions());
+					wordToLastPosition.put(storedWord.getText(), temp);
+				}
+				
+				globalScore += getSingleScore(storedWord, inputWord, wordToLastPosition.get(storedWord.getText()));
+				
 			} else {			
-				globalScore -= inputWord.getPositionDetail().getOccurences() * WORD_NOT_PRESENT_PENALITY_MULTIPLIER;		
+				globalScore -= inputWord.getPositionDetail().getOccurences() * WORD_NOT_PRESENT_PENALITY_MULTIPLIER;
 			}
 			i++;
 		}
@@ -55,13 +64,18 @@ public class ScoreGenerator {
 	}
 */
 	
-	private static double getSingleScore(Word wd_a,Word wd_b, int last_wd_b_pos) {
+	private static double getSingleScore(Word stored,Word input, ArrayList<Integer> lastPositions) {
 		
-		if(!wd_a.getText().equals(wd_b.getText())) return 0;
+		if(!stored.getText().equals(input.getText())) return 0;
 		 
-		double score = (wd_a.getPositionDetail().getOccurences() * wd_b.getPositionDetail().getOccurences()) - WORD_SINGLE_PRESENCE_PENALITY;
+		double score = (stored.getPositionDetail().getOccurences() * input.getPositionDetail().getOccurences()) - WORD_SINGLE_PRESENCE_PENALITY;
 		
-		if(wd_b.getPositionDetail().getPositions().contains(last_wd_b_pos+1)) score = score * SEQUENCIAL_MULTIPLIER;
+		for(Integer temp : lastPositions) {
+			if(stored.getPositionDetail().getPositions().contains(temp+1)) { 
+				score = score * SEQUENCIAL_MULTIPLIER;		
+			}
+		}
+		
 		
 		return score;
 	}
