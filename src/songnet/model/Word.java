@@ -3,16 +3,16 @@ package songnet.model;
 public class Word implements Comparable<Word>{
 
 	private String text;
-	private int occurences;
+	private PositionDetail positionDetail;
 	
 	public Word() {
 		super();
 	}
-	
-	public Word(String text, int occurences) {
+
+	public Word(String text, PositionDetail positionDetail) {
 		super();
 		this.text = text;
-		this.occurences = occurences;
+		this.positionDetail = positionDetail;
 	}
 
 	public String getText() {
@@ -23,19 +23,19 @@ public class Word implements Comparable<Word>{
 		this.text = text;
 	}
 
-	public int getOccurences() {
-		return occurences;
+	public PositionDetail getPositionDetail() {
+		return positionDetail;
 	}
 
-	public void setOccurences(int occurences) {
-		this.occurences = occurences;
+	public void setPositionDetail(PositionDetail positionDetail) {
+		this.positionDetail = positionDetail;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + occurences;
+		result = prime * result + ((positionDetail == null) ? 0 : positionDetail.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		return result;
 	}
@@ -49,7 +49,10 @@ public class Word implements Comparable<Word>{
 		if (getClass() != obj.getClass())
 			return false;
 		Word other = (Word) obj;
-		if (occurences != other.occurences)
+		if (positionDetail == null) {
+			if (other.positionDetail != null)
+				return false;
+		} else if (!positionDetail.equals(other.positionDetail))
 			return false;
 		if (text == null) {
 			if (other.text != null)
@@ -64,15 +67,16 @@ public class Word implements Comparable<Word>{
 		StringBuilder builder = new StringBuilder();
 		builder.append("Word [text=");
 		builder.append(text);
-		builder.append(", occurences=");
-		builder.append(occurences);
+		builder.append(", positionDetail=");
+		builder.append(positionDetail);
 		builder.append("]");
 		return builder.toString();
 	}
+	
 
 	@Override
 	public int compareTo(Word arg0) {
-		return this.occurences-arg0.occurences;
+		return this.getPositionDetail().getOccurences()-arg0.getPositionDetail().getOccurences();
 	}
 	
 }

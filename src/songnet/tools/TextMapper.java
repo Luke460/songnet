@@ -1,8 +1,8 @@
 package songnet.tools;
 
 import static songnet.constants.Constants.MINIMAL_WORD_LENGTH;
-import static songnet.constants.Constants.TEXT_SAMPLES_NUMBER;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +10,7 @@ import java.util.List;
 import songnet.model.DecodedSong;
 import songnet.model.Song;
 import songnet.model.Word;
+import songnet.model.PositionDetail;
 
 public class TextMapper {
 	
@@ -20,37 +21,28 @@ public class TextMapper {
 		str.replaceAll("[^a-zA-Z0-9]", " "); 
 		
 		List<String> words = Arrays.asList(str.split(" "));
-		HashMap<String,Integer> stringToNumber = new HashMap<>();
+		HashMap<String,PositionDetail> stringToPD = new HashMap<>();
 		
+		
+		int i = 0;
 		for(String temp:words) {
 			if(temp.length()>=MINIMAL_WORD_LENGTH) {				
-				if(stringToNumber.containsKey(temp)) {
-					Word existingWord = new Word(temp, stringToNumber.get(temp));
-					existingWord.setOccurences(existingWord.getOccurences()+1);
-					stringToNumber.put(temp, existingWord.getOccurences());
+				if(stringToPD.containsKey(temp)) {
+					Word existingWord = new Word(temp, stringToPD.get(temp));
+					existingWord.getPositionDetail().setOccurences(existingWord.getPositionDetail().getOccurences()+1);
+					existingWord.getPositionDetail().getPositions().add(i);
+					stringToPD.put(temp, existingWord.getPositionDetail());
 				} else { 
-					stringToNumber.put(temp, 1);
+					ArrayList<Integer> newPos =  new ArrayList<Integer>(0);
+					newPos.add(i);
+					stringToPD.put(temp, new PositionDetail(1, newPos));
 				}
 			}
+			i++;
 		}
 		
-		stringToNumber = resizeMap(stringToNumber);
-		
-		return new DecodedSong(inputSong.getName(), inputSong.getAuthorName(), stringToNumber);
+		return new DecodedSong(inputSong.getName(), inputSong.getAuthorName(), stringToPD);
 
-	}
-
-	private static HashMap<String, Integer> resizeMap(HashMap<String, Integer> stringToNumber) {
-		if(TEXT_SAMPLES_NUMBER==-1) return stringToNumber;
-		HashMap<String, Integer> sortedMap = new HashMap<>();
-		HashMap<String, Integer> result = new HashMap<>();
-		sortedMap = (HashMap<String, Integer>) MapUtil.sortByValue(stringToNumber);
-
-		for(String temp:sortedMap.keySet()) {
-			result.put(temp, stringToNumber.get(temp));
-			if (result.size()>TEXT_SAMPLES_NUMBER) return result;
-		}
-		return result;
 	}
 	
 }

@@ -7,24 +7,17 @@ public class DecodedSong {
 	
 	private String name;
 	private String authorName;
-	private HashMap<String,Integer> wordToNumber;
+	private HashMap<String,PositionDetail> wordToPD;
 	
 	public DecodedSong() {
 		super();
 	}
 
-	public DecodedSong(String name, String authorName) {
+	public DecodedSong(String name, String authorName, HashMap<String, PositionDetail> wordToPD) {
 		super();
 		this.name = name;
 		this.authorName = authorName;
-		this.wordToNumber = new HashMap<String,Integer>();
-	}
-	
-	public DecodedSong(String name, String authorName, HashMap<String,Integer> words) {
-		super();
-		this.name = name;
-		this.authorName = authorName;
-		this.wordToNumber = words;
+		this.wordToPD = wordToPD;
 	}
 
 	public String getName() {
@@ -43,12 +36,12 @@ public class DecodedSong {
 		this.authorName = authorName;
 	}
 
-	public HashMap<String,Integer> getWords() {
-		return wordToNumber;
+	public HashMap<String,PositionDetail> getWords() {
+		return wordToPD;
 	}
 
-	public void setWords(HashMap<String,Integer> words) {
-		this.wordToNumber = words;
+	public void setWords(HashMap<String,PositionDetail> words) {
+		this.wordToPD = words;
 	}
 
 	@Override
@@ -57,7 +50,7 @@ public class DecodedSong {
 		int result = 1;
 		result = prime * result + ((authorName == null) ? 0 : authorName.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((wordToNumber == null) ? 0 : wordToNumber.hashCode());
+		result = prime * result + ((wordToPD == null) ? 0 : wordToPD.hashCode());
 		return result;
 	}
 
@@ -80,10 +73,10 @@ public class DecodedSong {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (wordToNumber == null) {
-			if (other.wordToNumber != null)
+		if (wordToPD == null) {
+			if (other.wordToPD != null)
 				return false;
-		} else if (!wordToNumber.equals(other.wordToNumber))
+		} else if (!wordToPD.equals(other.wordToPD))
 			return false;
 		return true;
 	}
@@ -96,7 +89,7 @@ public class DecodedSong {
 		builder.append(", authorName=");
 		builder.append(authorName);
 		builder.append(", words=");
-		builder.append(wordToNumber);
+		builder.append(wordToPD);
 		builder.append("]");
 		return builder.toString();
 	}
